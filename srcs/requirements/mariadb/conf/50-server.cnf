@@ -3,4 +3,6 @@ datadir = /var/lib/mysql
 socket  = /run/mysqld/mysqld.sock
 bind_address=*
 port = 3306
+
+# Cette mention reste a voir car peut etre qu il est preferable de remplacer mysql par mcordes
 user = mysql

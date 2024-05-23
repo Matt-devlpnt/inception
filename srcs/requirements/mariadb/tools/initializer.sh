@@ -1,3 +1,5 @@
+#!/bin/sh
+
 rc-service mariadb start
 
 mariadb -e "CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE_NAME}\`;"

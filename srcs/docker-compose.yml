@@ -1,5 +1,35 @@
 services:
+  mariadb:
+    build:
+      context: ./requirements/mariadb
+      dockerfile: Dockerfile
+    image: mariadb:10.11.6
+    container_name: mariadb
+    env_file: .env
+    init: true
+    restart: always
+    networks:
+      - network
+    hostname: mariadb
+
+  wordpress:
+    depends_on:
+      - mariadb
+    build:
+      context: ./requirements/wordpress
+      dockerfile: Dockerfile
+    image: wordpress
+    container_name: wordpress
+    env_file: .env
+    init: true
+    restart: always
+    networks:
+      - network
+    hostname: wordpress
+
   nginx:
+    depends_on:
+      - wordpress
     build:
       context: ./requirements/nginx
       dockerfile: Dockerfile
@@ -10,25 +40,10 @@ services:
     env_file: .env
     init: true
     restart: always
-    command: /bin/sh -c "envsubst < /etc/nginx/conf.d/template > /etc/nginx/conf.d/mcordes_42_fr.conf && rm /etc/nginx/conf.d/template && nginx -g 'daemon off;'"
-  wordpress:
-    build:
-      context: ./requirements/wordpress
-      dockerfile: Dockerfile
-    image: wordpress
-    container_name: wordpress
-    env_file: .env
-    init: true
-    restart: always
-    command: /bin/sh -c "envsubst < /sites/mcordes.42.fr/wordpress/tmp > /sites/mcordes.42.fr/wordpress/wp-config.php && rm /sites/mcordes.42.fr/wordpress/tmp && sleep 'infinity;'"
-  mariadb:
-    build:
-      context: ./requirements/mariadb
-      dockerfile: Dockerfile
-    ports:
-      - "3306:3306/tcp"
-    image: mariadb:10.11.6
-    container_name: mariadb
-    env_file: .env
-    init: true
-    restart: always
+    networks:
+      - network
+    hostname: nginx
+
+networks:
+  network:
+    driver: bridge

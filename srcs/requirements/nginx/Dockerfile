@@ -3,7 +3,7 @@
 
 FROM alpine@sha256:695ae78b4957fef4e53adc51febd07f5401eb36fcd80fff3e5107a2b4aa42ace
 
-RUN apk update && apk upgrade && apk add openssl curl ca-certificates vim gettext-envsubst
+RUN apk update && apk upgrade && apk add openssl curl ca-certificates vim
 
 RUN printf "%s%s%s\n" \
 	"http://nginx.org/packages/alpine/v" \
@@ -16,10 +16,26 @@ RUN mv /tmp/nginx_signing.rsa.pub /etc/apk/keys/
 RUN apk add nginx
 
 RUN mkdir /etc/nginx/ssl
-RUN openssl req -x509 -nodes -out /etc/nginx/ssl/mcordes_42_fr.pem -keyout /etc/nginx/ssl/mcordes_42_fr.key -subj "/C=FR/P=Alpes\ Maritimes/L=Nice/O=Ecole\ 42/OU=Ecole/CN=mcordes.42.fr/E=mcordes@student.42nice.fr"
+RUN openssl req -x509 -nodes \
+	-out /etc/nginx/ssl/mcordes_42_fr.pem \
+	-keyout /etc/nginx/ssl/mcordes_42_fr.key \
+	-subj "/C=FR/P=Alpes\ Maritimes/L=Nice/O=Ecole\ 42/OU=Ecole/CN=mcordes.42.fr/E=mcordes@student.42nice.fr"
 
 RUN mkdir -p /sites/mcordes.42.fr
 
-COPY ./conf/mcordes_42_fr.conf /etc/nginx/conf.d/template
+COPY ./conf/mcordes_42_fr.conf /etc/nginx/conf.d/mcordes_42_fr.conf
+COPY ./conf/default.conf /etc/nginx/conf.d/default.conf
+
+COPY ./tools/init_nginx.sh /tmp/init_nginx.sh
+RUN chmod +x /tmp/init_nginx.sh
+
+#COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+RUN adduser -D -g "www-data" www-data -G www-data
 
 EXPOSE 443
+
+RUN echo coucou > /sites/mcordes.42.fr/index.html
+RUN echo Errorrrrrrrrrr !!! > /sites/mcordes.42.fr/404.html
+#RUN echo "<?php phpinfo(); ?>" > /sites/mcordes.42.fr/phpinfo.php
+
+CMD ["/tmp/init_nginx.sh"]
