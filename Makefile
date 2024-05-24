@@ -11,4 +11,8 @@ fclean: clean
 		sudo docker rmi -f $(shell sudo docker images -qa); \
 	fi
 
+	@if [ $$(sudo docker network ls -q | wc -l) -ne 0 ]; then \
+		sudo docker network prune -f; \
+	fi
+
 re: fclean all

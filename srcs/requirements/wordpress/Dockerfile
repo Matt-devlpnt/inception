@@ -23,6 +23,7 @@ RUN chmod +x /tmp/init_wordpress.sh
 
 EXPOSE 9000
 
-RUN echo "<?php phpinfo(); ?>" > /sites/mcordes.42.fr/phpinfo.php
+#RUN echo "<?php phpinfo(); ?>" > /sites/mcordes.42.fr/phpinfo.php
+RUN echo "<?php echo \"Hello from wordpress\";" > /sites/mcordes.42.fr/phpinfo.php
 
 CMD ["/tmp/init_wordpress.sh"]
