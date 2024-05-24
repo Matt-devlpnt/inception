@@ -1,6 +1,9 @@
 .PHONY: all clean fclean re
 
 all:
+	@if [ ! -d "/home/${USER}/data/wordpress_website_files" ]; then \
+		mkdir -p "/home/${USER}/data/wordpress_website_files"; \
+	fi
 	@sudo docker compose -f ./srcs/docker-compose.yml up -d --build
 
 clean:
