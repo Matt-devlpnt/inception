@@ -24,6 +24,7 @@ RUN openssl req -x509 -nodes \
 	-keyout /etc/nginx/ssl/mcordes_42_fr.key \
 	-subj "/C=FR/P=Alpes\ Maritimes/L=Nice/O=Ecole\ 42/OU=Ecole/CN=mcordes.42.fr/E=mcordes@student.42nice.fr"
 
+# Create a target volume for website repo
 RUN mkdir -p /sites/mcordes.42.fr
 
 # nginx config
@@ -34,13 +35,6 @@ COPY ./conf/default.conf /etc/nginx/conf.d/default.conf
 COPY ./tools/init_nginx.sh /tmp/init_nginx.sh
 RUN chmod +x /tmp/init_nginx.sh
 
-#COPY ./conf/nginx.conf /etc/nginx/nginx.conf
-#RUN adduser -D -g "www-data" www-data -G www-data
-
 EXPOSE 443
-# Test a supprimer
-RUN echo coucou > /sites/mcordes.42.fr/index.html
-RUN echo Errorrrrrrrrrr !!! > /sites/mcordes.42.fr/404.html
-#RUN echo "<?php echo \"Hello from Docker\";" > /sites/mcordes.42.fr/phpinfo.php
 
 CMD ["/tmp/init_nginx.sh"]

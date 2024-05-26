@@ -27,7 +27,7 @@ services:
       - network
     hostname: wordpress
     volumes:
-      - wordpress_website_files:/tmp
+      - "wordpress_website_files:/sites/mcordes.42.fr"
 
   nginx:
     depends_on:
@@ -46,7 +46,7 @@ services:
       - network
     hostname: nginx
     volumes:
-      - wordpress_website_files:/tmp
+      - "wordpress_website_files:/sites/mcordes.42.fr"
 
 networks:
   network:
@@ -58,4 +58,4 @@ volumes:
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: "/home/${USER}/data/wordpress_website_files"
+      device: "/home/mcordes/data/wordpress_website_files"

@@ -1,8 +1,8 @@
 .PHONY: all clean fclean re
 
 all:
-	@if [ ! -d "/home/${USER}/data/wordpress_website_files" ]; then \
-		mkdir -p "/home/${USER}/data/wordpress_website_files"; \
+	@if [ ! -d "/home/mcordes/data/wordpress_website_files" ]; then \
+		sudo mkdir -p "/home/mcordes/data/wordpress_website_files"; \
 	fi
 	@sudo docker compose -f ./srcs/docker-compose.yml up -d --build
 
@@ -16,6 +16,10 @@ fclean: clean
 
 	@if [ $$(sudo docker network ls -q | wc -l) -ne 0 ]; then \
 		sudo docker network prune -f; \
+	fi
+
+	@if [ $$(sudo docker volume ls -q | wc -l) -ne 0 ]; then \
+		sudo docker volume rm -f $(shell sudo docker volume ls -q); \
 	fi
 
 re: fclean all
