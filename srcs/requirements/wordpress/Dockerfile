@@ -11,9 +11,11 @@ RUN tar -xzvf wordpress-6.5.3-fr_FR.tar.gz && rm -rf wordpress-6.5.3-fr_FR.tar.g
 RUN mkdir -p /sites/mcordes.42.fr
 RUN chown -R root:root wordpress
 RUN rm wordpress/wp-config-sample.php
-RUN mv wordpress/* /sites/mcordes.42.fr && rmdir wordpress
+#RUN mv wordpress/* /sites/mcordes.42.fr && rmdir wordpress
+RUN mv wordpress /sites/mcordes.42.fr
 
-COPY ./conf/wp-config.php /sites/mcordes.42.fr/wp-config.php
+COPY ./conf/wp-config.php /sites/mcordes.42.fr/wordpress/wp-config.php
+RUN mv /sites/mcordes.42.fr/wordpress/index.php /sites/mcordes.42.fr/
 
 RUN adduser -D -g "www-data" www-data -G www-data
 COPY ./conf/www.conf /etc/php82/php-fpm.d/www.conf
@@ -22,8 +24,5 @@ COPY ./tools/init_wordpress.sh /tmp/init_wordpress.sh
 RUN chmod +x /tmp/init_wordpress.sh
 
 EXPOSE 9000
-
-#RUN echo "<?php phpinfo(); ?>" > /sites/mcordes.42.fr/phpinfo.php
-RUN echo "<?php echo \"Hello from wordpress\";" > /sites/mcordes.42.fr/phpinfo.php
 
 CMD ["/tmp/init_wordpress.sh"]
