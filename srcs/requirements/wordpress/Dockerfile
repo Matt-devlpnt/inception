@@ -19,11 +19,14 @@ RUN mv wordpress/* /sites/mcordes.42.fr && rmdir wordpress
 # wordpress config
 COPY ./conf/wp-config.php /sites/mcordes.42.fr/wp-config.php
 
+# php-fpm config
 RUN adduser -D -g "www-data" www-data -G www-data
 COPY ./conf/www.conf /etc/php82/php-fpm.d/www.conf
 
+# Change the right of web site files
 RUN chown -R www-data:www-data /sites && chmod -R 755 /sites
 
+# Script to init container
 COPY ./tools/init_wordpress.sh /tmp/init_wordpress.sh
 RUN chmod +x /tmp/init_wordpress.sh
 
