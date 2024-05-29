@@ -1,9 +1,14 @@
 .PHONY: all clean fclean re
 
 all:
-	@if [ ! -d "/home/mcordes/data/wordpress_website_files" ]; then \
-		sudo mkdir -p "/home/mcordes/data/wordpress_website_files"; \
+	@if [ ! -d "/home/mcordes/data/wordpress" ]; then \
+		sudo mkdir -p "/home/mcordes/data/wordpress"; \
 	fi
+
+	@if [ ! -d "/home/mcordes/data/mariadb" ]; then \
+		sudo mkdir -p "/home/mcordes/data/mariadb"; \
+	fi
+
 	@sudo docker compose -f ./srcs/docker-compose.yml up -d --build
 
 clean:

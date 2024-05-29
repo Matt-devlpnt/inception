@@ -21,16 +21,16 @@
 
 // ** Réglages MySQL - Votre hébergeur doit vous fournir ces informations. ** //
 /** Nom de la base de données de WordPress. */
-define('DB_NAME', ${MYSQL_DATABASE_NAME});
+define('DB_NAME', '${MYSQL_DATABASE_NAME}');
 
 /** Utilisateur de la base de données MySQL. */
-define('DB_USER', ${MYSQL_USER});
+define('DB_USER', '${MYSQL_USER}');
 
 /** Mot de passe de la base de données MySQL. */
-define('DB_PASSWORD', ${MYSQL_PASSWORD});
+define('DB_PASSWORD', '${MYSQL_PASSWORD}');
 
 /** Adresse de l’hébergement MySQL. */
-define('DB_HOST', mariadb);
+define('DB_HOST', 'mariadb');
 
 /** Jeu de caractères à utiliser par la base de données lors de la création des tables. */
 define('DB_CHARSET', 'utf8');
@@ -84,13 +84,14 @@ $table_prefix = 'wp_';
  *
  * @link https://fr.wordpress.org/support/article/debugging-in-wordpress/
  */
-define('WP_DEBUG', false);
+define('WP_DEBUG', true);
+define('WP_DEBUG_LOG', true);
 
 /* C’est tout, ne touchez pas à ce qui suit ! Bonne publication. */
 
 /** Chemin absolu vers le dossier de WordPress. */
 if ( !defined('ABSPATH') )
-	define('ABSPATH', dirname(/sites/${DOMAIN_NAME}) . '/');
+	define('ABSPATH', dirname(__FILE__) . '/');
 
 /** Réglage des variables de WordPress et de ses fichiers inclus. */
 require_once(ABSPATH . 'wp-settings.php');

@@ -11,6 +11,8 @@ services:
     networks:
       - network
     hostname: mariadb
+    volumes:
+      - "mariadb:/var/lib/mysql"
 
   wordpress:
     depends_on:
@@ -27,7 +29,7 @@ services:
       - network
     hostname: wordpress
     volumes:
-      - "wordpress_website_files:/sites/mcordes.42.fr"
+      - "wordpress:/sites/mcordes.42.fr"
 
   nginx:
     depends_on:
@@ -46,16 +48,22 @@ services:
       - network
     hostname: nginx
     volumes:
-      - "wordpress_website_files:/sites/mcordes.42.fr"
+      - "wordpress:/sites/mcordes.42.fr"
 
 networks:
   network:
     driver: bridge
 
 volumes:
-  wordpress_website_files:
+  wordpress:
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: "/home/mcordes/data/wordpress_website_files"
+      device: "/home/mcordes/data/wordpress"
+  mariadb:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: "/home/mcordes/data/mariadb"
