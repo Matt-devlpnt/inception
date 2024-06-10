@@ -4,20 +4,17 @@
 FROM alpine@sha256:695ae78b4957fef4e53adc51febd07f5401eb36fcd80fff3e5107a2b4aa42ace
 
 # Install utils
-RUN apk update && apk upgrade && apk add vim php82 php82-fpm php82-mysqli mariadb-client
+RUN apk update && apk upgrade && apk add vim curl php82 php82-fpm php82-mysqli php82-phar php82-mbstring mariadb-client
 
-# Install wordpress
-RUN wget https://fr.wordpress.org/wordpress-6.5.3-fr_FR.tar.gz
-RUN tar -xzvf wordpress-6.5.3-fr_FR.tar.gz && rm -rf wordpress-6.5.3-fr_FR.tar.gz
-
-# Create repo for website
-RUN mkdir -p /sites/mcordes.42.fr
-RUN chown -R root:root wordpress
-RUN rm wordpress/wp-config-sample.php
-RUN mv wordpress/* /sites/mcordes.42.fr && rmdir wordpress
+# Install wpcli
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+RUN chmod +x wp-cli.phar
+RUN mv wp-cli.phar /usr/local/bin/wp
 
 # wordpress config
-COPY ./conf/wp-config.php /sites/mcordes.42.fr/wp-config.php
+RUN mkdir -p /sites/mcordes.42.fr
+WORKDIR /sites/mcordes.42.fr
+RUN php82 /usr/local/bin/wp core download --path='/sites/mcordes.42.fr'
 
 # php-fpm config
 RUN adduser -D -g "www-data" www-data -G www-data
